@@ -1,13 +1,10 @@
-class Solution:
+class Solution2:
 	list1=[]
 	res=[]
 	def recurgenerate(self,first,last):
 		if(first+1==last):
 			self.list1[first],self.list1[last]='(',')'
 			self.res.append("".join(self.list1))
-			if n%2==0 and first==n-1:
-				self.list1[first],self.list1[last]=')','('
-				self.res.append("".join(self.list1))
 			return 
 		self.list1[first],self.list1[last]='(',')'
 		self.recurgenerate(first+1,last-1)
@@ -35,3 +32,15 @@ class Solution:
 		self.res=list(set(self.res))
 		self.res.sort(key=self.res.index)
 		return self.res
+class Solution:
+    def generateParenthesis(self, n):
+        """
+        :type n: int
+        :rtype: List[str]
+        """
+        def generate(p,left,right, parentheis=[]):
+        	if left: generate(p+'(',left-1,right)
+        	if right>left: generate(p+')',left,right-1)
+        	if 0==right:parentheis.append(p)
+        	return parentheis
+        return generate('',n,n)
