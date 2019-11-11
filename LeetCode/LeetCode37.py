@@ -1,4 +1,5 @@
 class Solution:
+    #递归的方式求，本质上是回溯算法
     def combinationSum(self, candidates, target):
         result=[]
         candidates.sort()
@@ -25,7 +26,7 @@ class Solution:
             mid=int((low+high)/2)
             if candidates[mid]==target:return mid
             elif candidates[mid]<target:low=mid+1
-            else:high=mid-1
+            else:high=mid
         return high
 
 
