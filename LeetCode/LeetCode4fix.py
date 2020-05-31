@@ -95,7 +95,7 @@ class Solution1(object):
 #中位数是 求 第(m+n+1)//2和(m+n+2)//2的均值
 #递归，寻找第k大小的数
 import sys
-class Solution:
+class Solution_perfect:
     def findMedianSortedArrays(self, nums1, nums2) -> float:
         def binarySearch(start1,end1,start2,end2,k):
             if end1<start1:return nums2[start2+k-1]
@@ -118,8 +118,30 @@ class Solution:
         r=(len(nums1)+len(nums2)+2)//2
         return (binarySearch(0,len(nums1)-1,0,len(nums2)-1,l)+binarySearch(0,len(nums1)-1,0,len(nums2)-1,r))/2
 
-nums1=[1]
-nums2=[2,3,4,5,6]
+#思路：改为寻找第k个小的数 中位数等于 (l+1)//2的数加（l+2）//的数  二分查找
+#T:O（logN）
+#S:O(1)
+class Solution:
+    def findMedianSortedArrays(self, nums1, nums2) -> float:
+        def recurFind(nums1,start1,nums2,start2,k):
+            if start1>len(nums1)-1:return nums2[start2+k-1]
+            if start2>len(nums2)-1:return nums1[start1+k-1]
+            if k==1:return min(nums1[start1],nums2[start2])
+            mid=k//2
+            if start1+mid-1>len(nums1)-1:
+                return recurFind(nums1,start1,nums2,start2+k-mid,mid)
+            if start2+k-mid-1>len(nums2)-1:
+                return recurFind(nums1,start1+mid,nums2,start2,k-mid)
+            if nums1[start1+mid-1]==nums2[start2+k-mid-1]:
+                return nums1[start1+mid-1]
+            elif nums1[start1+mid-1]<nums2[start2+k-mid-1]:
+                return recurFind(nums1,start1+mid,nums2,start2,k-mid)
+            return recurFind(nums1,start1,nums2,start2+k-mid,mid)
+        k1=(len(nums1)+len(nums2)+1)//2
+        k2=(len(nums1)+len(nums2)+2)//2
+        return (recurFind(nums1,0,nums2,0,k1)+recurFind(nums1,0,nums2,0,k2))/2
+nums1=[2,3,4]
+nums2=[2]
 t=Solution()
 print (t.findMedianSortedArrays(nums1,nums2))
 

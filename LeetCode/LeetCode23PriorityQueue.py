@@ -13,7 +13,7 @@ x=[]
 x.append(l1)
 x.append(l3)
 #思路，应用优先级队列
-class Solution:
+class Solution0:
 	def mergeKLists(self, lists):
 		"""
         :type lists: List[ListNode]
@@ -29,3 +29,19 @@ class Solution:
 			step=step.next#step后移
 			if step.next!=None:que.put((step.next.val,idx,step.next))#待输出链表的当前末尾结点的下一结点若不为空则入队
 		return head.next
+class Solution:
+    def mergeKLists(self, lists) -> ListNode:
+        from queue import PriorityQueue
+        if not lists:return None
+        pq=PriorityQueue()
+        for i in range(len(lists)):
+            if lists[i]:pq.put((lists[i].val,lists[i]))
+        head=ListNode(0)
+        p=head
+        while not pq.empty():
+            val,p.next=pq.get()
+            p=p.next
+            if p.next:pq.put((p.next.val,p.next))
+        return head.next
+s=Solution()
+print(s.mergeKLists(x))
