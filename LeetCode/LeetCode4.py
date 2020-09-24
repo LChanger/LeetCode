@@ -17,6 +17,8 @@ class Solution(object):
         	else:t=t+i
         s1=s[st:st+le]
         return (s1,le)
+
+        
 s="pwwkew"
 #print s[2:4]
 t=Solution()

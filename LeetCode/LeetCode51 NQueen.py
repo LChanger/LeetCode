@@ -1,4 +1,4 @@
-class Solution:
+class Solution0:
     def solveNQueens(self, n: int):
         res=[]
         nums=[-1]*n #nums[i]代表在第i行上Q的位置
@@ -16,6 +16,24 @@ class Solution:
         for i in range(prog):
             if nums[prog]==nums[i] or abs(nums[prog]-nums[i])==abs(prog-i):return False
         return True
+
+#思路：一个list path[i]表示第i行的列位置
+#xy_add 记录 当前行 加 列的位置，用于识别右下方向的冲突位置。
+#xy_sub 记录 当前行 减 列的位置，用于识别左下方向的冲突位置。
+class Solution:
+    def solveNQueens(self, n: int) :
+        if not n:return []
+        res=[]
+        def DFS(path,length,xy_add,xy_sub):
+            if length==n:return res.append(path)
+            for i in range(n):
+                if i not in path and length+i not in xy_add and length-i not in xy_sub:
+                    DFS(path+[i],length+1,xy_add|{length+i},xy_sub|{length-i})
+        DFS([],0,set(),set())
+        for i in range(len(res)):
+            for j in range(len(res[i])):
+                res[i][j]='.'*res[i][j]+'Q'+'.'*(len(res[i])-1-res[i][j])
+        return res
 n=4
 t=Solution()
 print (t.solveNQueens(n))

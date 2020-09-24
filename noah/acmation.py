@@ -1,0 +1,83 @@
+class Node:
+    def __init__(self,val):
+        self.val=val
+        self.fail=None
+        self.tail=0
+        self.child={}#子结点
+
+class Acmation:
+    def __init__(self):
+        self.root=Node("")
+        self.count=0
+    
+    def insert(self,ch):
+        node=self.root
+        for c in ch:
+            if c not in node.child:
+                new_node=Node(c)
+                node.child[c]=new_node
+            node=node.child[c]
+        self.count+=1
+        node.tail=self.count
+    #修改fail指针
+    def ac_automation(self):
+        self.root.fail=None
+        from collections import deque
+        que=deque()
+        for child in self.root.child.values():
+            child.fail=self.root
+            que.append(child)
+        while que:
+            top=que.popleft()
+            for c,v in top.child.items():
+                fail_to=top.fail
+                while fail_to:
+                    if c in fail_to.child:
+                        v.fail=fail_to.child[c]
+                        break
+                    else:
+                        fail_to=fail_to.fail
+                if not fail_to:v.fail=self.root
+                que.append(v)
+        
+    #进行模式匹配
+    def runkmp(self,str_mode):
+        p=self.root#s字符与p的子结点匹配
+        cnt={}
+        i=0
+        while i<len(str_mode):
+            if str_mode[i] in p.child:#匹配到了子结点
+                p=p.child[str_mode[i]] #自动机此时进入已经匹配上的节点
+                temp=p
+                while temp:
+                    if temp.tail>0:
+                        cnt[temp.tail]=cnt.get(temp.tail,0)+1
+                    temp=temp.fail
+                i+=1
+            else:#没有匹配到子节点
+                p=p.fail
+                if not p:
+                    p=self.root
+                    i+=1
+        return cnt
+
+key = ["王志","王志青","dahai","qww"]        #创建模式串
+acp = Acmation()
+
+for s in key:
+    acp.insert(s)                           #添加模式串
+import datetime
+
+acp.ac_automation()
+
+start = datetime.datetime.now()             #开始时间
+
+text = '王志喜欢王志青'
+d = acp.runkmp(text)                    #运行自动机
+# '''
+print (d)                               #打印
+for i in d.keys():
+    print(key[i-1],d[i])                #将子串匹配的数量显示
+# '''
+end  = datetime.datetime.now()              #结束时的时间
+print ('总共花费时间是:',end - start)       #打印出总共花费时间
